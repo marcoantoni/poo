@@ -7,7 +7,7 @@ public class ExemploAleatorio{
 		Random gerador = new Random();
 		
 		// criando um numero inteiro aleatorio;
-		int intAleatorio = gerador.nextInt();
+		int intAleatorio = gerador.nextInt(0, 100);// define o intervalo dos numeros sorteados
 		
 		float floatAleatorio = gerador.nextFloat();
 		
