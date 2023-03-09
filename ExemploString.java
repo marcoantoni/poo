@@ -82,6 +82,13 @@ public class ExemploString {
 		String primeiraLetra = nomeCompleto.substring(0, 1).toUpperCase() + nomeCompleto.substring(1);
 		System.out.printf("Primeira letra: %s \n", primeiraLetra);
 		
+		// Dica para resolver o exercicio 5
+		char caracter = '8';
+		
+		int numero = Character.getNumericValue(caracter);
+		
+		System.out.printf("Numero: %d \n", numero);
+		
 	}
 }
 
