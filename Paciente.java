@@ -2,13 +2,13 @@ class Paciente {
 	// atributos da classe - também chamados de variaveis de instancia
 	String nome;
 	String endereco;
-	String nascimento;
+	Data nascimento;	// exemplo de composição: criando um atributo do tipo Data
 	String cpf;
 	String prontuario;
 	
 	// cria um método para gravar as informações no atributos (inicializar os dados)
 	// o método retornar algo (int) é apenas para reforçar o exemplo da comunicação através da troca de mensagens
-	public int cadastrarPaciente(String nome_p, String end, String nasc, String cpf_p){
+	public int cadastrarPaciente(String nome_p, String end, Data nasc, String cpf_p){
 		// testa se o nome está em branco
 		if (nome_p == ""){
 			return 0; // codigo para representar erro
@@ -28,7 +28,8 @@ class Paciente {
 	public void mostrarProntuario(){
 		System.out.printf("Nome: %s \n", nome);
 		System.out.printf("Endereço: %s \n", endereco);
-		System.out.printf("Nascimento: %s \n", nascimento);
+		// como nascimento é do tipo Data, torna-se possível acessar os atributos e métodos da classe
+		System.out.printf("Nascimento: %s \n", nascimento.escreverPorExtenso() );
 		System.out.printf("Cpf: %s \n", cpf);
 		System.out.printf("Prontuário: %s \n", prontuario);
 	
@@ -52,8 +53,11 @@ class Paciente {
 		// cria uma instancia da classe (um novo objeto) do tipo Paciente
 		Paciente pac1 = new Paciente();
 		
+		// cria uma instancia da classe data para passar como parametro na linha abaixo
+		Data dt1 = new Data(15, 5, 1997);
+		
 		// cria uma variavel que armazena o código retornado pelo método cadastrarPaciente, que será executado utilizando os parametros que foram passados
-		int cod = pac1.cadastrarPaciente("Lucas", "Rua Frederico A. Timmem - Rolante/RS", "22/08/2006", "029.567.738-88");
+		int cod = pac1.cadastrarPaciente("Lucas", "Rua Frederico A. Timmem - Rolante/RS", dt1, "029.567.738-88");
 
 		// testa o código de erro para mostrar uma mensagem
 		if (cod  == 1 )
@@ -73,7 +77,8 @@ class Paciente {
 			
 		Paciente pac2 = new Paciente();
 		
-		pac2.cadastrarPaciente("Bruna", "Parobé", "24/07/2001", "089.557.768-98");
+		// na linha abaixo, new Data(14, 4, 1995) cria uma instancia da classe sem armazenar em uma variavel
+		pac2.cadastrarPaciente("Bruna", "Parobé", new Data(14, 4, 1995), "089.557.768-98");
 		
 		
 		pac2.mostrarProntuario();
