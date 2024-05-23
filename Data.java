@@ -1,8 +1,9 @@
-class Data {
+public class Data {
 	// declaracao dos atributos da classe
-	int dia;
-	int mes;
-	int ano;
+	// encapsupando os atributos com o private
+	private int dia;
+	private int mes;
+	private int ano;
 	
 	public String escreverPorExtenso(){
 		String meses[] = {"janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",	"agosto", "setembro", "outubro", "novembro", "dezembro"};
@@ -21,7 +22,9 @@ class Data {
 		return false;
 	}
 	
-	public void ajustarDia(int dia) {
+	
+	// método set sempre terá a seguinte definição: public void setNomedoAtributo(<tipo do atributo>)
+	public void setDia(int dia) {
 		int diasMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		
 		if (dia >=1 && dia <= diasMes[this.mes-1]){
@@ -32,7 +35,12 @@ class Data {
 		}
 	}
 	
-	public void ajustarMes(int mes) {
+	// método get sempre terá a seguinte definição: public <tipo do atributo> getNomedoAtributo()
+	public int getDia() {
+		return dia;	// return NomedoAtributo
+	}
+	
+	public void setMes(int mes) {
 		// validação do mes
 		if (mes >= 1 && mes <= 12){
 			this.mes = mes;
@@ -42,7 +50,11 @@ class Data {
 		}
 	}
 	
-	public void ajustarAno(int ano){	
+	public int getMes(){
+		return mes;
+	}
+	
+	public void setAno(int ano){	
 		if (ano > 1900){
 			this.ano = ano;
 		} else {
@@ -51,17 +63,21 @@ class Data {
 		}
 	}
 	
+	public int getAno() {
+		return ano;
+	}
+	
 	
 	
 	// Desafio para fazer em casa:
 	// criar um método para validação de numeros, eliminando a necessidade dos if de validação do dia/mes/ano
 	public void ajustarData(int dia, int mes, int ano){
 		
-		ajustarMes(mes);
+		setMes(mes);
 		
-		ajustarDia(dia);
+		setDia(dia);
 		
-		ajustarAno(ano);
+		setAno(ano);
 	
 	}
 	
@@ -72,11 +88,11 @@ class Data {
 	public Data (int dia, int mes, int ano){
 		// validação do mes
 		
-		ajustarMes(mes);
+		setMes(mes);
 		
-		ajustarDia(dia);
+		setDia(dia);
 		
-		ajustarAno(ano);			
+		setAno(ano);			
 
 	}
 	
