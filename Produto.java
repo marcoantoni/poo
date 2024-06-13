@@ -1,9 +1,9 @@
 class Produto {
-	String nome;	
-	float precoCompra;
-	float precoVenda;
-	int codigo;	// codigo do produto (id)
-	String descricao;	// caso queira adicionar detalhes sobre o produto
+	protected String nome;	
+	protected float precoCompra;
+	protected float precoVenda;
+	protected int codigo;	// codigo do produto (id)
+	protected String descricao;	// caso queira adicionar detalhes sobre o produto
 	
 	/* construtor1: obriga a informar o nome e o preco de compra do produto
 	 * a partir do preco de compra, o preco de venda será acrescido de 50%
@@ -42,8 +42,20 @@ class Produto {
 			System.out.println("Preco de venda inválido");
 	}
 	
+	public void mostrar() {
+		System.out.printf("%s - Preço R$: %f - cód: %d \nDescrição: %s \n", nome,  precoVenda, codigo, descricao);
+	}
+	
 	public static void main (String []args){
 		Produto p1 = new Produto("Pepsi", 3.89f);
 	}	
+	
+	public void setDescricao(String desc) {
+		if (desc.length() > 10) {
+			this.descricao = desc;
+		} else {
+			System.out.println("Descrição inválida");
+		}
+	}
 	
 }
