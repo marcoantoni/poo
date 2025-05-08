@@ -1,19 +1,20 @@
 class Data {
 	// declaração dos atributos necessários para representar a data
-	int dia;
-	int mes;
-	int ano;
+	// encapsulando os atributos da classe com o modificador de acesso private
+	private int dia;
+	private int mes;
+	private int ano;
 
-	public Data (int dia, int mes, int ano) {
+	public Data (int dia, int mes, int ano) {	
+		setMes(mes);
+		setDia(dia);
+		setAno(ano);
 		
-		// validando o mes do ano
-		if (mes >= 1 && mes <= 12){
-			// aqui o mes é valido
-			this.mes = mes;
-		} else {
-			this.mes = 1;	// definindo um mes default para inicialização dos atributos da classe
-		}
-		
+	}
+	
+	// métodos setters
+	
+	public void setDia(int dia) {
 		// validação do dia
 		
 		// definindo um array para armazenar a quantidade de dias de cada mês 
@@ -26,13 +27,37 @@ class Data {
 		} else {
 			this.dia = 1; // definindo um dia default para inicialização dos atributos da classe
 		}
-		
+	}
+	
+	public void setMes(int mes) {
+		// validando o mes do ano
+		if (mes >= 1 && mes <= 12){
+			// aqui o mes é valido
+			this.mes = mes;
+		} else {
+			this.mes = 1;	// definindo um mes default para inicialização dos atributos da classe
+		}
+	}
+	
+	public void setAno(int ano) {
 		// validação do ano
 		if (ano >= 1970) {
 			this.ano = ano;
 		} else {
 			this.ano = 1970; // definindo um dia default para inicialização dos atributos da classe
 		}
+	}
+	
+	public int getDia(){
+		return dia;
+	}
+	
+	public int getMes() {
+		return mes;
+	}
+	
+	public int getAno() {
+		return ano;
 	}
 	
 	// método responsável por escrever a data por extenso
