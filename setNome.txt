@@ -1,0 +1,15 @@
+public void setNome(String nome) {
+    // Expressão regular para um nome iniciando com letra maiúscula seguida de letras minúsculas
+    String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
+
+    // Um nome completo válido deve conter de 2 a 5 palavras (ex: "João da Silva Souza")
+    String patternName = "(" + regexName + "){2,5}";
+
+    // Verifica se o nome atende ao padrão definido
+    if (nome.matches(patternName)) {
+        this.nome = nome; // Nome válido, armazena no atributo
+    } else {
+        // Nome inválido, exibe uma mensagem informativa ao usuário
+        System.out.println("NOME INVÁLIDO. INSIRA UM NOME NO FORMATO \"Nome Sobrenome\"");
+    }
+}
