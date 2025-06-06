@@ -1,11 +1,14 @@
 import java.util.Random;	// importar a classe responsável pela geração de números aleatórios
 
 class Produto {
-	String nome;	
-	float precoCompra;
-	float precoVenda;
-	int codigo;	// codigo do produto (id) - será gerado de maneira aleatória
-	String descricao; // esse atributo não será usado
+	
+	// protected - permite que os membros fiquem acessíveis nas subclasses
+	// podendo ser acessados diratamente
+	protected String nome;	
+	protected float precoCompra;
+	protected float precoVenda;
+	protected int codigo;	// codigo do produto (id) - será gerado de maneira aleatória
+	protected String descricao; // esse atributo não será usado
 	
 	
 	/* construtor1: obriga a informar o nome e o preco de compra do produto
