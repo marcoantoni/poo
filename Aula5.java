@@ -141,6 +141,11 @@ class Aula5 {
 		// Exibe o número gerado dentro do intervalo definido
 		System.out.printf("O numero aleatório gerado foi %d \n", numAleatorio);
 		
+		
+		char caractere = 115; // um caractere pode ser gerado através do numero inteiro, que representa ele na tabela ASCII
+		
+		System.out.printf("O caracter gerado foi: %s \n", caractere);
+		
 	}
 
 }
