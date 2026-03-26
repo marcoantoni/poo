@@ -7,7 +7,12 @@ public class Aluno {
 	String cpf;
 	String email;
 	int matricula;
-	String curso;
+	
+	// ALTERAÇÃO: o atributo curso deixou de ser String e passou a ser int
+	// Agora ele armazena um código numérico que representa o curso
+	// Isso permite padronizar valores e evitar erros de digitação
+	int curso;
+	
 	String nascimento;
 	String fone; // atributo adicional para telefone
 	
@@ -15,17 +20,27 @@ public class Aluno {
 	// Pertence à classe, e não a uma instância específica
 	static int qtdAlunos;
 	
+	// ALTERAÇÃO: criação de constantes para representar os cursos
+	// O uso de "static final" define valores fixos (constantes)
+	// Isso evita o uso de números "mágicos" no código (ex: curso == 1)
+	static final int CURSO_TPG = 1;
+	static final int CURSO_ADS = 2;
+	
 	// Método construtor: executado automaticamente ao criar um objeto
-	// Responsável por inicializar os atributos e validar os dados recebidos
-	public Aluno(String nome, String cpf, String email){
+	// ALTERAÇÃO: agora recebe também o código do curso como parâmetro
+	public Aluno(String nome, String cpf, String email, int cod_curso){
 		
 		// Validação do nome: deve possuir mais de 5 caracteres
 		if (nome.length() > 5) {
-			this.nome = nome; // atribui o valor ao atributo da classe
+			this.nome = nome;
 		} else {
 			System.out.printf("O nome %s é invalidado, pois tem menos de 5 letras \n", nome);
 			this.nome = "Nome não informado";
 		}
+		
+		// ALTERAÇÃO: atribuição direta do curso a partir do código recebido
+		// Neste momento não há validação, assumindo que o valor informado é válido
+		this.curso = cod_curso;
 		
 		// Validação do CPF utilizando método externo da classe CpfCnpjUtils
 		if (CpfCnpjUtils.isValidCPF(cpf)){
@@ -48,9 +63,7 @@ public class Aluno {
 	}
 	
 	// Método responsável por ler os dados do aluno via teclado
-	// Não possui retorno (void)
 	public void lerTeclado(){
-		// Instancia o objeto Scanner para leitura de dados
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.printf("Informe o nome do aluno: ");
@@ -65,11 +78,14 @@ public class Aluno {
 		System.out.printf("Informe a matricula do aluno: ");
 		matricula = sc.nextInt();
 		
-		// Consome a quebra de linha pendente do nextInt()
-		sc.nextLine();
+		sc.nextLine(); // consome a quebra de linha pendente
 		
+		// ALTERAÇÃO: leitura do curso agora é feita como número inteiro
+		// O usuário deve informar um dos códigos definidos nas constantes
 		System.out.printf("Informe o curso do aluno: ");
-		curso = sc.nextLine();
+		curso = sc.nextInt();
+		
+		sc.nextLine(); // consome a quebra de linha pendente
 		
 		System.out.printf("Informe a data de nascimento: ");
 		nascimento = sc.nextLine();
@@ -79,19 +95,26 @@ public class Aluno {
 	}
 	
 	// Sobrescrita do método toString()
-	// Retorna uma String com todos os dados do aluno formatados
 	public String toString(){
-		String saida = ""; // variável acumuladora
+		String saida = "";
 		
-		// Concatenação dos atributos para montagem da saída
 		saida = saida + "Nome: " + nome + "\n";
 		saida += "CPF: " + cpf + "\n";
 		saida += "E-mail: " + email + "\n";
 		saida += "Nº matricula: " + matricula + "\n";
-		saida += "Curso: " + curso + "\n";
+		
+		// ALTERAÇÃO: interpretação do código do curso para exibição textual
+		// Em vez de imprimir o número, o código é traduzido para o nome do curso
+		// O uso das constantes torna a leitura mais clara e evita erros
+		if (curso == CURSO_TPG)
+			saida += "Curso Superior de Tecnologia em Processos Gerenciais\n";
+		else if (curso == CURSO_ADS)
+			saida += "Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas\n";
+		else 
+			saida += "Curso não especificado\n";
+		
 		saida += "Data de nascimento: " + nascimento + "\n";
 		
-		// Exibe o telefone apenas se ele tiver sido informado
 		if (fone != null)
 			saida += "Telefone para contato: " + fone + "\n \n";
 				
@@ -99,52 +122,35 @@ public class Aluno {
 	}
 	
 	// Método estático para exibir a quantidade total de alunos criados
-	// Pode ser chamado sem instanciar a classe
 	public static String exibirQtdAlunos() {
 		return "Atualmente existem " + qtdAlunos + " matriculas na instituição";
 	}
 	
-	// Exemplo de método inválido (comentado):
-	// Métodos estáticos não podem acessar atributos não estáticos diretamente
-	/*public static String exibirNomeAluno(){
-		return "Nome: " + nome;
-	}*/
-	
 	public static void main (String args[]) {
 		
-		// Criação do primeiro objeto Aluno (instanciação)
-		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com");
+		// ALTERAÇÃO: ao criar o aluno, agora é necessário informar o curso
+		// utilizando as constantes definidas na classe
+		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG);
 		
-		// A leitura via teclado foi desativada para evitar digitação repetitiva
-		// al01.lerTeclado();
-		
-		// Atribuição manual de alguns atributos
-		al01.curso = "TADS";
-		
-		// Criação do segundo aluno
-		Aluno al02 = new Aluno("Felipe D.", "556.161.350-20", "felipe@t");	
+		// Criação do segundo aluno com outro curso
+		Aluno al02 = new Aluno("Felipe D.", "556.161.350-20", "felipe@t", Aluno.CURSO_ADS);	
 		
 		al02.matricula = 202517645;
-		al02.curso = "TADS";
 		
-		// Leitura do teclado também desativada para o segundo aluno
-		// al02.lerTeclado();
-		
-		// Exibição dos dados dos alunos
 		System.out.printf(al01.toString());
-		
-		// Exibe os dados em letras maiúsculas
 		System.out.printf(al02.toString().toUpperCase());
 		
-		// Criação de um terceiro aluno
-		Aluno al03 = new Aluno("Gustavo", "315.339.860-70", "gustavo@ymail.com");
+		// Terceiro aluno também utilizando constante
+		Aluno al03 = new Aluno("Gustavo", "315.339.860-70", "gustavo@ymail.com", Aluno.CURSO_ADS);
 		
 		al03.matricula = 202518644;
-		al03.curso = "TADS";
 		
 		System.out.printf(al03.toString());
 		
-		// Exibição da quantidade total de alunos criados (atributo estático)
 		System.out.printf(Aluno.exibirQtdAlunos());
+		
+		// IMPORTANTE: constantes não podem ser alteradas
+		// A linha abaixo geraria erro de compilação
+		//Aluno.CURSO_TPG = 5;
 	}
 }
