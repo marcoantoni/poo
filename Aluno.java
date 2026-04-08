@@ -13,7 +13,10 @@ public class Aluno {
 	// Isso permite padronizar valores e evitar erros de digitação
 	int curso;
 	
-	String nascimento;
+	// Exemplo de composição: um aluno possui uma data de nascimento.
+	// Em vez de usar String, utilizamos a classe Data para representar melhor essa informação.
+	Data nascimento;
+	
 	String fone; // atributo adicional para telefone
 	
 	// Atributo estático para contabilizar quantos objetos Aluno foram criados
@@ -28,7 +31,8 @@ public class Aluno {
 	
 	// Método construtor: executado automaticamente ao criar um objeto
 	// ALTERAÇÃO: agora recebe também o código do curso como parâmetro
-	public Aluno(String nome, String cpf, String email, int cod_curso){
+	// incluindo um objeto do tipo Data para representar a data de nascimento.
+	public Aluno(String nome, String cpf, String email, int cod_curso, Data nasc){
 		
 		// Validação do nome: deve possuir mais de 5 caracteres
 		if (nome.length() > 5) {
@@ -57,6 +61,9 @@ public class Aluno {
 			System.out.printf("O e-mail %s é inválido\n", email);
 			this.email = "";
 		}
+		
+		// Atribui ao atributo nascimento o objeto Data recebido como parâmetro
+		this.nascimento = nasc;
 		
 		// Incrementa o contador de alunos a cada nova instância criada
 		qtdAlunos++;
@@ -87,8 +94,14 @@ public class Aluno {
 		
 		sc.nextLine(); // consome a quebra de linha pendente
 		
-		System.out.printf("Informe a data de nascimento: ");
-		nascimento = sc.nextLine();
+		// System.out.printf("Informe a data de nascimento: ");
+		/* 
+		 * Não é possível ler a data de nascimento diretamente como String,
+		 * pois o atributo passou a ser do tipo Data.
+		 * Para isso, seria necessário ler dia, mês e ano separadamente
+		 * e instanciar um objeto Data com essas informações.
+		 */
+		// nascimento = sc.nextLine();
 		
 		System.out.printf("Informe um telefone para contato: ");
 		fone = sc.nextLine();
@@ -113,7 +126,9 @@ public class Aluno {
 		else 
 			saida += "Curso não especificado\n";
 		
-		saida += "Data de nascimento: " + nascimento + "\n";
+		// Utiliza o método da classe Data para obter a data de nascimento formatada
+		// e adiciona essa informação à saída do aluno
+		saida += "Data de nascimento: " + nascimento.escreverAbreviado() + "\n";
 		
 		if (fone != null)
 			saida += "Telefone para contato: " + fone + "\n \n";
@@ -130,10 +145,17 @@ public class Aluno {
 		
 		// ALTERAÇÃO: ao criar o aluno, agora é necessário informar o curso
 		// utilizando as constantes definidas na classe
-		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG);
+		// ALTERAÇÃO2: Também é preciso criar previamente um objeto do tipo Data,
+		// que será passado ao construtor para representar a data de nascimento.
+		Data nascimentoAluno01 = new Data(8, 4, 2005);
+		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG, nascimentoAluno01);
 		
 		// Criação do segundo aluno com outro curso
-		Aluno al02 = new Aluno("Felipe D.", "556.161.350-20", "felipe@t", Aluno.CURSO_ADS);	
+		// Neste caso, o objeto Data é criado diretamente dentro da chamada do construtor.
+		// Essa prática evita a criação de uma variável auxiliar, tornando o código mais compacto.
+		Aluno al02 = new Aluno("Felipe D.", "556.161.350-20", "felipe@t", Aluno.CURSO_ADS, 
+			new Data(14, 8, 2009)
+		);	
 		
 		al02.matricula = 202517645;
 		
@@ -141,7 +163,7 @@ public class Aluno {
 		System.out.printf(al02.toString().toUpperCase());
 		
 		// Terceiro aluno também utilizando constante
-		Aluno al03 = new Aluno("Gustavo", "315.339.860-70", "gustavo@ymail.com", Aluno.CURSO_ADS);
+		Aluno al03 = new Aluno("Gustavo", "315.339.860-70", "gustavo@ymail.com", Aluno.CURSO_ADS, new Data (21, 19, 2006));
 		
 		al03.matricula = 202518644;
 		
