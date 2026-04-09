@@ -145,6 +145,8 @@ class Data {
 		aulasPOO[2] = new Data(15, 4, 2026);
 		aulasPOO[3] = new Data(22, 4, 2026);
 		aulasPOO[4] = new Data(29, 4, 2026);
+		// tentar adicionar mais um item no array causa um erro, pois o array está cheio
+		//aulasPOO[5] = new Data(29, 4, 2026);
 
 
 		// =========================
