@@ -148,6 +148,37 @@ public class Aluno {
 		// ALTERAÇÃO2: Também é preciso criar previamente um objeto do tipo Data,
 		// que será passado ao construtor para representar a data de nascimento.
 		Data nascimentoAluno01 = new Data(8, 4, 2005);
+		
+		// Após aplicar o encapsulamento (atributos como private),
+		// não é mais possível acessar diretamente os atributos da classe.
+
+		// A linha abaixo geraria ERRO DE COMPILAÇÃO,
+		// pois "dia" é privado e só pode ser acessado dentro da própria classe Data.
+		
+		// nascimentoAluno01.dia = 35;
+
+
+		// Para alterar o valor de um atributo, devemos utilizar o método SET,
+		// que além de permitir a modificação, também aplica validações.
+		nascimentoAluno01.setAno(2002);
+
+
+		// Da mesma forma, não é possível acessar diretamente o atributo "ano"
+
+		// A linha abaixo também geraria ERRO,
+		// pois "ano" é private.
+		
+		// System.out.printf("O aluno 1 nasceu no ano de %d \n", nascimentoAluno01.ano);
+
+
+		// Para acessar o valor, utilizamos o método GET,
+		// que retorna o valor do atributo de forma controlada.
+		System.out.printf("O aluno 1 nasceu no ano de %d \n", nascimentoAluno01.getAno() );
+
+		// Se for necessário alterar o dia, também devemos usar o setter,
+		// garantindo que a validação (ex: dia válido para o mês) seja aplicada.
+		// nascimentoAluno01.setDia(35);
+		
 		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG, nascimentoAluno01);
 		
 		// Criação do segundo aluno com outro curso
