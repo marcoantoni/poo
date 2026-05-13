@@ -2,49 +2,70 @@
 import java.util.Scanner;
 
 public class Aluno {
+	// Encapsuplando os atributos da classe, que foi foi exercício da aula de 29/04 sobre encapsulamento
+	// Foram criados os métodos setCurso, getCurso, setEmail e getEmail. Não há o setNome, pois presume-se que "nome" 
+	// refere-se ao nome civel de um cidadão, portanto, não será alterado. Nossa classe não está comtemplando o "nome social", que poderia ser alterado
+	// neste caso, seria obrigatório pelas regras de negócio permitir alterar o nome social.
+	 
 	// Atributos da classe que representam os dados do aluno
-	String nome;
-	String cpf;
-	String email;
-	int matricula;
+	private String nome;
+	private String cpf;
+	private String email;
+	private int matricula;
 	
 	// ALTERAÇÃO: o atributo curso deixou de ser String e passou a ser int
 	// Agora ele armazena um código numérico que representa o curso
 	// Isso permite padronizar valores e evitar erros de digitação
-	int curso;
+	private int curso;
 	
 	// Exemplo de composição: um aluno possui uma data de nascimento.
 	// Em vez de usar String, utilizamos a classe Data para representar melhor essa informação.
-	Data nascimento;
+	private Data nascimento;
 	
-	String fone; // atributo adicional para telefone
+	private String fone; // atributo adicional para telefone
 	
 	// Atributo estático para contabilizar quantos objetos Aluno foram criados
 	// Pertence à classe, e não a uma instância específica
-	static int qtdAlunos;
+	private static int qtdAlunos;
 	
 	// ALTERAÇÃO: criação de constantes para representar os cursos
 	// O uso de "static final" define valores fixos (constantes)
 	// Isso evita o uso de números "mágicos" no código (ex: curso == 1)
-	static final int CURSO_TPG = 1;
-	static final int CURSO_ADS = 2;
+	public static final int CURSO_TPG = 1;
+	public static final int CURSO_ADS = 2;
 	
 	// Método construtor: executado automaticamente ao criar um objeto
 	// ALTERAÇÃO: agora recebe também o código do curso como parâmetro
 	// incluindo um objeto do tipo Data para representar a data de nascimento.
 	public Aluno(String nome, String cpf, String email, int cod_curso, Data nasc){
 		
-		// Validação do nome: deve possuir mais de 5 caracteres
-		if (nome.length() > 5) {
+		/* Expressão regular utilizada para validar o nome.
+		 * A validação agora exige que o nome possua pelo menos duas partes,
+		 * separadas por espaço, contendo apenas letras (inclusive acentuadas).
+		 * Foi removida a validação anterior que exigia no mínimo 5 letras,
+		 * pois ela permitia nomes como "Carlos", que possuem quantidade suficiente
+		 * de caracteres, mas apenas uma única parte.
+		 * Com a nova regra:
+		 * - "Carlos" → inválido (possui apenas uma parte)
+		 * - "Felipe D." → inválido (o ponto não é permitido)
+		 * - "Felipe Santos" → válido
+		*/
+		
+		String regex = "^[\\p{L}]+( [\\p{L}]+)+$";
+
+		// Verifica se o nome não é nulo e se atende ao padrão definido na regex
+		if (nome != null && nome.matches(regex) ) {
+			// Se o nome for válido, ele é armazenado no atributo
 			this.nome = nome;
 		} else {
-			System.out.printf("O nome %s é invalidado, pois tem menos de 5 letras \n", nome);
+			// Caso o nome seja inválido, exibe uma mensagem informando o motivo
+			System.out.printf("O nome %s é invalidado, pois deve ter no mínimo duas partes \n", nome);
+			// Define um valor padrão para evitar que o atributo fique vazio
 			this.nome = "Nome não informado";
 		}
 		
-		// ALTERAÇÃO: atribuição direta do curso a partir do código recebido
-		// Neste momento não há validação, assumindo que o valor informado é válido
-		this.curso = cod_curso;
+		// agora que foi criado o método setCurso, chamamos ele para fazer a validação e atribuição
+		setCurso(cod_curso);
 		
 		// Validação do CPF utilizando método externo da classe CpfCnpjUtils
 		if (CpfCnpjUtils.isValidCPF(cpf)){
@@ -54,6 +75,17 @@ public class Aluno {
 			this.cpf = "";
 		}
 		
+		setEmail(email);
+		
+		// Atribui ao atributo nascimento o objeto Data recebido como parâmetro
+		this.nascimento = nasc;
+		
+		// Incrementa o contador de alunos a cada nova instância criada
+		qtdAlunos++;
+	}
+	
+	
+	public void setEmail(String email) {
 		// Validação simples do e-mail (tamanho mínimo)
 		if (email.length() > 8) {
 			this.email = email;
@@ -61,12 +93,30 @@ public class Aluno {
 			System.out.printf("O e-mail %s é inválido\n", email);
 			this.email = "";
 		}
-		
-		// Atribui ao atributo nascimento o objeto Data recebido como parâmetro
-		this.nascimento = nasc;
-		
-		// Incrementa o contador de alunos a cada nova instância criada
-		qtdAlunos++;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+
+	public void setCurso(int curso) {
+		/* Códigos geralmente são positivos. Não foi espeficicado um valor máximo, pois podem haver regras para criação dos códigos
+		 * Poderiamos ter um padrão: cursos que começam com 1 referem-se a cursos de nível médio, cursos que começam com 2, poderiam ser cursos superiores
+		 * Exemplos
+		 * - 11 - Técnico em Informática
+		 * - 21 - Análise e Desenvolvimento de Sistemas
+		 */
+		if (curso > 0){
+			this.curso = curso;
+		} else {
+			System.out.printf("Código de curso inválido. Verifique com o Setor de Registros Acadêmicos o código correto. \n");
+			this.curso = 1;
+		}
+	}
+	
+	public int getCurso() {
+		return curso;
 	}
 	
 	// Método responsável por ler os dados do aluno via teclado
@@ -179,7 +229,7 @@ public class Aluno {
 		// garantindo que a validação (ex: dia válido para o mês) seja aplicada.
 		// nascimentoAluno01.setDia(35);
 		
-		Aluno al01 = new Aluno("Carlos", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG, nascimentoAluno01);
+		Aluno al01 = new Aluno("Carlos Augusto", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG, nascimentoAluno01);
 		
 		// Criação do segundo aluno com outro curso
 		// Neste caso, o objeto Data é criado diretamente dentro da chamada do construtor.
