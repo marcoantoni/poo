@@ -84,6 +84,10 @@ public class Aluno {
 		qtdAlunos++;
 	}
 	
+	// criando o getNome
+	public String getNome(){
+		return nome;
+	}
 	
 	public void setEmail(String email) {
 		// Validação simples do e-mail (tamanho mínimo)
