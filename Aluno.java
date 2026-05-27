@@ -1,178 +1,249 @@
 // Import necessário para leitura de dados via teclado
 import java.util.Scanner;
 
-public class Aluno {
-	// Encapsuplando os atributos da classe, que foi foi exercício da aula de 29/04 sobre encapsulamento
-	// Foram criados os métodos setCurso, getCurso, setEmail e getEmail. Não há o setNome, pois presume-se que "nome" 
-	// refere-se ao nome civel de um cidadão, portanto, não será alterado. Nossa classe não está comtemplando o "nome social", que poderia ser alterado
-	// neste caso, seria obrigatório pelas regras de negócio permitir alterar o nome social.
-	 
-	// Atributos da classe que representam os dados do aluno
-	private String nome;
-	private String cpf;
-	private String email;
-	private int matricula;
+/*
+ * A classe Aluno agora HERDA da classe Pessoa através da palavra-chave EXTENDS.
+ * 
+ * Isso significa que Aluno passa a reutilizar atributos e métodos da superclasse Pessoa,
+ * evitando repetição de código.
+ * 
+ * Com isso, Aluno herda:
+ * - nome
+ * - cpf
+ * - matricula
+ * - email
+ * - getNome()
+ * - getEmail()
+ * - setEmail()
+ * 
+ * A relação de herança representa a ideia de que:
+ * "Aluno é uma Pessoa".
+ */
+public class Aluno extends Pessoa {
 	
-	// ALTERAÇÃO: o atributo curso deixou de ser String e passou a ser int
-	// Agora ele armazena um código numérico que representa o curso
-	// Isso permite padronizar valores e evitar erros de digitação
+	/*
+	 * Os atributos nome, cpf, email e matricula foram removidos desta classe,
+	 * pois agora pertencem à superclasse Pessoa.
+	 * 
+	 * Essa alteração evita duplicação de código e permite que outras classes,
+	 * como Professor, também reutilizem essas informações.
+	 */
+	
+	/*
+	 * Encapsulamento:
+	 * O atributo curso é privado (private), permitindo acesso apenas
+	 * através dos métodos set e get.
+	 * 
+	 * ALTERAÇÃO:
+	 * Antes o curso era armazenado como String.
+	 * Agora passou a utilizar códigos numéricos inteiros.
+	 * 
+	 * Isso ajuda a:
+	 * - padronizar valores;
+	 * - evitar erros de digitação;
+	 * - facilitar validações.
+	 */
 	private int curso;
 	
-	// Exemplo de composição: um aluno possui uma data de nascimento.
-	// Em vez de usar String, utilizamos a classe Data para representar melhor essa informação.
+	/*
+	 * Exemplo de composição:
+	 * Um aluno possui uma data de nascimento.
+	 * 
+	 * Em vez de armazenar como String,
+	 * utilizamos um objeto da classe Data.
+	 */
 	private Data nascimento;
 	
-	private String fone; // atributo adicional para telefone
+	// Atributo adicional para telefone
+	private String fone;
 	
-	// Atributo estático para contabilizar quantos objetos Aluno foram criados
-	// Pertence à classe, e não a uma instância específica
+	/*
+	 * Atributo estático:
+	 * pertence à classe e não aos objetos individualmente.
+	 * 
+	 * Será utilizado para contar quantos alunos foram criados.
+	 */
 	private static int qtdAlunos;
 	
-	// ALTERAÇÃO: criação de constantes para representar os cursos
-	// O uso de "static final" define valores fixos (constantes)
-	// Isso evita o uso de números "mágicos" no código (ex: curso == 1)
+	/*
+	 * Constantes utilizadas para representar os cursos.
+	 * 
+	 * O uso de static final cria valores fixos,
+	 * evitando o uso de números "mágicos" no código.
+	 */
 	public static final int CURSO_TPG = 1;
 	public static final int CURSO_ADS = 2;
 	
-	// Método construtor: executado automaticamente ao criar um objeto
-	// ALTERAÇÃO: agora recebe também o código do curso como parâmetro
-	// incluindo um objeto do tipo Data para representar a data de nascimento.
+	/*
+	 * Método construtor da classe Aluno.
+	 * 
+	 * ALTERAÇÃO IMPORTANTE:
+	 * As validações de nome, CPF e e-mail não estão mais nesta classe.
+	 * 
+	 * Essas responsabilidades foram movidas para a superclasse Pessoa,
+	 * centralizando as validações em um único local.
+	 */
 	public Aluno(String nome, String cpf, String email, int cod_curso, Data nasc){
 		
-		/* Expressão regular utilizada para validar o nome.
-		 * A validação agora exige que o nome possua pelo menos duas partes,
-		 * separadas por espaço, contendo apenas letras (inclusive acentuadas).
-		 * Foi removida a validação anterior que exigia no mínimo 5 letras,
-		 * pois ela permitia nomes como "Carlos", que possuem quantidade suficiente
-		 * de caracteres, mas apenas uma única parte.
-		 * Com a nova regra:
-		 * - "Carlos" → inválido (possui apenas uma parte)
-		 * - "Felipe D." → inválido (o ponto não é permitido)
-		 * - "Felipe Santos" → válido
-		*/
+		/*
+		 * A referência SUPER é utilizada para acessar elementos
+		 * da superclasse (classe mãe).
+		 * 
+		 * Neste caso, super(...) está chamando o construtor
+		 * da classe Pessoa.
+		 * 
+		 * Isso faz com que os atributos herdados:
+		 * - nome
+		 * - cpf
+		 * - email
+		 * 
+		 * sejam inicializados diretamente pela superclasse.
+		 * 
+		 * Além disso, todas as validações existentes
+		 * no construtor de Pessoa também serão executadas.
+		 * 
+		 * IMPORTANTE:
+		 * A chamada para super(...) deve obrigatoriamente
+		 * ser a primeira linha do construtor.
+		 * 
+		 * Caso exista um construtor na superclasse
+		 * que recebe parâmetros, o Java exige que ele
+		 * seja chamado antes de qualquer outra instrução.
+		 */
+		super(nome, cpf, email);
 		
-		String regex = "^[\\p{L}]+( [\\p{L}]+)+$";
-
-		// Verifica se o nome não é nulo e se atende ao padrão definido na regex
-		if (nome != null && nome.matches(regex) ) {
-			// Se o nome for válido, ele é armazenado no atributo
-			this.nome = nome;
-		} else {
-			// Caso o nome seja inválido, exibe uma mensagem informando o motivo
-			System.out.printf("O nome %s é invalidado, pois deve ter no mínimo duas partes \n", nome);
-			// Define um valor padrão para evitar que o atributo fique vazio
-			this.nome = "Nome não informado";
-		}
+		/*
+		 * O método setCurso é utilizado para validar e armazenar
+		 * o código do curso.
+		 */
+		setCurso(cod_curso);		
 		
-		// agora que foi criado o método setCurso, chamamos ele para fazer a validação e atribuição
-		setCurso(cod_curso);
-		
-		// Validação do CPF utilizando método externo da classe CpfCnpjUtils
-		if (CpfCnpjUtils.isValidCPF(cpf)){
-			this.cpf = cpf;
-		} else {
-			System.out.printf("O CPF %s é inválido. Verifique a informação \n", cpf);
-			this.cpf = "";
-		}
-		
-		setEmail(email);
-		
-		// Atribui ao atributo nascimento o objeto Data recebido como parâmetro
+		// Armazena a data de nascimento recebida
 		this.nascimento = nasc;
 		
-		// Incrementa o contador de alunos a cada nova instância criada
+		// Incrementa o contador de alunos criados
 		qtdAlunos++;
 	}
 	
-	// criando o getNome
-	public String getNome(){
-		return nome;
-	}
-	
-	public void setEmail(String email) {
-		// Validação simples do e-mail (tamanho mínimo)
-		if (email.length() > 8) {
-			this.email = email;
-		} else {
-			System.out.printf("O e-mail %s é inválido\n", email);
-			this.email = "";
-		}
-	}
-	
-	public String getEmail() {
-		return email;
-	}
+
+	/*
+	 * Os métodos setEmail() e getEmail() foram removidos desta classe,
+	 * pois agora pertencem à superclasse Pessoa.
+	 * 
+	 * Como Aluno herda de Pessoa,
+	 * esses métodos continuam disponíveis normalmente.
+	 */
 	
 
 	public void setCurso(int curso) {
-		/* Códigos geralmente são positivos. Não foi espeficicado um valor máximo, pois podem haver regras para criação dos códigos
-		 * Poderiamos ter um padrão: cursos que começam com 1 referem-se a cursos de nível médio, cursos que começam com 2, poderiam ser cursos superiores
-		 * Exemplos
-		 * - 11 - Técnico em Informática
-		 * - 21 - Análise e Desenvolvimento de Sistemas
+		
+		/* 
+		 * Validação do código do curso.
+		 * 
+		 * Os códigos devem ser positivos.
 		 */
 		if (curso > 0){
 			this.curso = curso;
 		} else {
-			System.out.printf("Código de curso inválido. Verifique com o Setor de Registros Acadêmicos o código correto. \n");
+			
+			System.out.printf(
+				"Código de curso inválido. "
+				+ "Verifique com o Setor de Registros Acadêmicos "
+				+ "o código correto. \n"
+			);
+			
 			this.curso = 1;
 		}
 	}
 	
+	// Método getter do atributo curso
 	public int getCurso() {
 		return curso;
 	}
 	
-	// Método responsável por ler os dados do aluno via teclado
-	public void lerTeclado(){
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.printf("Informe o nome do aluno: ");
-		nome = sc.nextLine();
-		
-		System.out.printf("Informe o CPF do aluno: ");
-		cpf = sc.nextLine();
-		
-		System.out.printf("Informe o e-mail do aluno: ");
-		email = sc.nextLine();
-		
-		System.out.printf("Informe a matricula do aluno: ");
-		matricula = sc.nextInt();
-		
-		sc.nextLine(); // consome a quebra de linha pendente
-		
-		// ALTERAÇÃO: leitura do curso agora é feita como número inteiro
-		// O usuário deve informar um dos códigos definidos nas constantes
-		System.out.printf("Informe o curso do aluno: ");
-		curso = sc.nextInt();
-		
-		sc.nextLine(); // consome a quebra de linha pendente
-		
-		// System.out.printf("Informe a data de nascimento: ");
-		/* 
-		 * Não é possível ler a data de nascimento diretamente como String,
-		 * pois o atributo passou a ser do tipo Data.
-		 * Para isso, seria necessário ler dia, mês e ano separadamente
-		 * e instanciar um objeto Data com essas informações.
-		 */
-		// nascimento = sc.nextLine();
-		
-		System.out.printf("Informe um telefone para contato: ");
-		fone = sc.nextLine();
-	}
+	/*
+	 * O método lerTeclado foi comentado temporariamente.
+	 * 
+	 * O objetivo é demonstrar a diferença entre:
+	 * - private
+	 * - protected
+	 * 
+	 * Os atributos herdados da classe Pessoa estão como protected,
+	 * permitindo acesso direto dentro da classe Aluno.
+	 * 
+	 * Caso fossem private,
+	 * as linhas abaixo gerariam erro de compilação.
+	 */
 	
-	// Sobrescrita do método toString()
+//	public void lerTeclado(){
+//		Scanner sc = new Scanner(System.in);
+		
+//		System.out.printf("Informe o nome do aluno: ");
+//		nome = sc.nextLine();
+		
+//		System.out.printf("Informe o CPF do aluno: ");
+//		cpf = sc.nextLine();
+		
+//		System.out.printf("Informe o e-mail do aluno: ");
+//		email = sc.nextLine();
+		
+//		System.out.printf("Informe a matricula do aluno: ");
+//		matricula = sc.nextInt();
+		
+//		sc.nextLine(); // consome a quebra de linha pendente
+		
+		/*
+		 * ALTERAÇÃO:
+		 * O curso agora é lido como inteiro,
+		 * utilizando os códigos definidos nas constantes.
+		 */
+//		System.out.printf("Informe o curso do aluno: ");
+//		curso = sc.nextInt();
+		
+//		sc.nextLine();
+		
+		/*
+		 * Como nascimento passou a ser um objeto Data,
+		 * não é possível ler diretamente usando String.
+		 * 
+		 * Seria necessário:
+		 * - ler dia;
+		 * - mês;
+		 * - ano;
+		 * 
+		 * e depois criar um objeto Data.
+		 */
+		
+//		System.out.printf("Informe um telefone para contato: ");
+//		fone = sc.nextLine();
+//	}
+
+	
+	/*
+	 * Sobrescrita do método toString().
+	 * 
+	 * Responsável por gerar uma representação textual do objeto.
+	 */
 	public String toString(){
+		
 		String saida = "";
 		
+		/*
+		 * Mesmo os atributos estando na superclasse Pessoa,
+		 * eles podem ser acessados aqui,
+		 * pois foram definidos como protected.
+		 * Ainda pode ser acessado através do método (getNome, por exemplo)
+		 */
 		saida = saida + "Nome: " + nome + "\n";
 		saida += "CPF: " + cpf + "\n";
 		saida += "E-mail: " + email + "\n";
 		saida += "Nº matricula: " + matricula + "\n";
 		
-		// ALTERAÇÃO: interpretação do código do curso para exibição textual
-		// Em vez de imprimir o número, o código é traduzido para o nome do curso
-		// O uso das constantes torna a leitura mais clara e evita erros
+		/*
+		 * Interpretação dos códigos dos cursos.
+		 * 
+		 * O código numérico é convertido em texto.
+		 */
 		if (curso == CURSO_TPG)
 			saida += "Curso Superior de Tecnologia em Processos Gerenciais\n";
 		else if (curso == CURSO_ADS)
@@ -180,65 +251,95 @@ public class Aluno {
 		else 
 			saida += "Curso não especificado\n";
 		
-		// Utiliza o método da classe Data para obter a data de nascimento formatada
-		// e adiciona essa informação à saída do aluno
-		saida += "Data de nascimento: " + nascimento.escreverAbreviado() + "\n";
+		/*
+		 * Utiliza método da classe Data
+		 * para escrever a data formatada.
+		 */
+		saida += "Data de nascimento: "
+			+ nascimento.escreverAbreviado() + "\n";
 		
+		// Exibe telefone apenas se ele existir
 		if (fone != null)
 			saida += "Telefone para contato: " + fone + "\n \n";
 				
 		return saida;
 	}
 	
-	// Método estático para exibir a quantidade total de alunos criados
+	/*
+	 * Método estático:
+	 * pode ser chamado sem criar objetos da classe.
+	 */
 	public static String exibirQtdAlunos() {
-		return "Atualmente existem " + qtdAlunos + " matriculas na instituição";
+		return "Atualmente existem "
+			+ qtdAlunos
+			+ " matriculas na instituição";
 	}
 	
 	public static void main (String args[]) {
 		
-		// ALTERAÇÃO: ao criar o aluno, agora é necessário informar o curso
-		// utilizando as constantes definidas na classe
-		// ALTERAÇÃO2: Também é preciso criar previamente um objeto do tipo Data,
-		// que será passado ao construtor para representar a data de nascimento.
+		/*
+		 * ALTERAÇÃO:
+		 * Agora é necessário criar um objeto Data
+		 * para representar a data de nascimento.
+		 */
 		Data nascimentoAluno01 = new Data(8, 4, 2005);
 		
-		// Após aplicar o encapsulamento (atributos como private),
-		// não é mais possível acessar diretamente os atributos da classe.
-
-		// A linha abaixo geraria ERRO DE COMPILAÇÃO,
-		// pois "dia" é privado e só pode ser acessado dentro da própria classe Data.
+		/*
+		 * Após aplicar encapsulamento na classe Data,
+		 * os atributos privados não podem mais ser acessados diretamente.
+		 */
 		
 		// nascimentoAluno01.dia = 35;
-
-
-		// Para alterar o valor de um atributo, devemos utilizar o método SET,
-		// que além de permitir a modificação, também aplica validações.
+		
+		
+		/*
+		 * Para modificar valores,
+		 * devemos utilizar métodos SET.
+		 */
 		nascimentoAluno01.setAno(2002);
 
-
-		// Da mesma forma, não é possível acessar diretamente o atributo "ano"
-
-		// A linha abaixo também geraria ERRO,
-		// pois "ano" é private.
 		
-		// System.out.printf("O aluno 1 nasceu no ano de %d \n", nascimentoAluno01.ano);
-
-
-		// Para acessar o valor, utilizamos o método GET,
-		// que retorna o valor do atributo de forma controlada.
-		System.out.printf("O aluno 1 nasceu no ano de %d \n", nascimentoAluno01.getAno() );
-
-		// Se for necessário alterar o dia, também devemos usar o setter,
-		// garantindo que a validação (ex: dia válido para o mês) seja aplicada.
-		// nascimentoAluno01.setDia(35);
+		/*
+		 * Também não é possível acessar diretamente
+		 * atributos privados.
+		 */
 		
-		Aluno al01 = new Aluno("Carlos Augusto", "919.960.290-37", "carlos@gmail.com", Aluno.CURSO_TPG, nascimentoAluno01);
+		// System.out.printf("%d", nascimentoAluno01.ano);
+
 		
-		// Criação do segundo aluno com outro curso
-		// Neste caso, o objeto Data é criado diretamente dentro da chamada do construtor.
-		// Essa prática evita a criação de uma variável auxiliar, tornando o código mais compacto.
-		Aluno al02 = new Aluno("Felipe D.", "556.161.350-20", "felipe@t", Aluno.CURSO_ADS, 
+		/*
+		 * Para acessar informações,
+		 * devemos utilizar métodos GET.
+		 */
+		System.out.printf(
+			"O aluno 1 nasceu no ano de %d \n",
+			nascimentoAluno01.getAno()
+		);
+
+		
+		/*
+		 * Criação do primeiro aluno.
+		 */
+		Aluno al01 = new Aluno(
+			"Carlos Augusto",
+			"919.960.290-37",
+			"carlos@gmail.com",
+			Aluno.CURSO_TPG,
+			nascimentoAluno01
+		);
+		
+		
+		/*
+		 * Criação do segundo aluno.
+		 * 
+		 * Neste caso, o objeto Data é criado diretamente
+		 * dentro da chamada do construtor.
+		 */
+		Aluno al02 = new Aluno(
+			"Felipe D.",
+			"556.161.350-20",
+			"felipe@t",
+			Aluno.CURSO_ADS,
 			new Data(14, 8, 2009)
 		);	
 		
@@ -247,17 +348,35 @@ public class Aluno {
 		System.out.printf(al01.toString());
 		System.out.printf(al02.toString().toUpperCase());
 		
-		// Terceiro aluno também utilizando constante
-		Aluno al03 = new Aluno("Gustavo", "315.339.860-70", "gustavo@ymail.com", Aluno.CURSO_ADS, new Data (21, 19, 2006));
+		
+		/*
+		 * Terceiro aluno.
+		 */
+		Aluno al03 = new Aluno(
+			"Gustavo",
+			"315.339.860-70",
+			"gustavo@ymail.com",
+			Aluno.CURSO_ADS,
+			new Data (21, 19, 2006)
+		);
 		
 		al03.matricula = 202518644;
 		
 		System.out.printf(al03.toString());
 		
+		
+		/*
+		 * Chamada de método estático.
+		 */
 		System.out.printf(Aluno.exibirQtdAlunos());
 		
-		// IMPORTANTE: constantes não podem ser alteradas
-		// A linha abaixo geraria erro de compilação
+		
+		/*
+		 * Constantes não podem ser alteradas.
+		 * 
+		 * A linha abaixo geraria erro de compilação.
+		 */
+		
 		//Aluno.CURSO_TPG = 5;
 	}
 }
