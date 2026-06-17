@@ -3,6 +3,8 @@ import java.text.SimpleDateFormat;
 
 abstract class Conta{
 	
+	// aqui tem um exemplo de polimorfismo: 
+	// o atributo cliente pode armazenar tanto um objeto do tipo PessoaFisica quanto PessoaJuridica
 	protected Pessoa cliente;
 	protected int nConta;
 	protected Data aberturaConta;
@@ -37,7 +39,8 @@ abstract class Conta{
 	}
 	
 	// o que aconteceria se o programador quiser reescrever esse metodo?
-	public void depositar(float valor){
+	// metodo final nao pode ser sobreescrito nas classes filhas
+	public final void depositar(float valor){
 		if (valor > 0){
 			saldo += valor;
 		}
@@ -45,18 +48,31 @@ abstract class Conta{
 	
 	// um método abstract tem a finalidade de obrigar que ele sejam implementado na classe filha.
 	// ele não tem as chaves pois não tem nenhuma implementação
-	//public abstract void sacar(float valor); 
+	public abstract void sacar(float valor); 
 	
 	public void imprimirExtrato(){
 		System.out.println("Cliente: " + cliente.getNome() );
 		System.out.println("Número da conta: " + nConta);
 		
-		// necessário saber se a variavel cliente contem uma instancia da classe PessoaFisica, para poder chamar o método getCpf
-		// essa decisão é tomada em tempo de execução
+		// Precisamos verificar qual é o tipo real do objeto armazenado na variável cliente.
+		// Embora a variável tenha sido declarada como Cliente (ou outra classe mais genérica),
+		// o objeto pode ser uma PessoaFisica ou uma PessoaJuridica.
+		// Essa verificação é feita em tempo de execução com o operador instanceof.
 		if (cliente instanceof PessoaFisica) {
-			System.out.println("CPF: " + ( (PessoaFisica)(cliente)).getCpf() );	// necessário fazer a conversão do tipo em tempo de execução para poder chamar o método da classe correspondente. No caso, o método geCpf() pertence a PessoaFisica
+
+			// Casting (conversão de referência):
+			// Aqui informamos ao Java que o objeto referenciado por cliente
+			// deve ser tratado como uma PessoaFisica.
+			// Isso permite acessar métodos que existem apenas nessa classe,
+			// como o método getCpf().
+			System.out.println("CPF: " + ((PessoaFisica) cliente).getCpf());
+
 		} else {
-			System.out.println("CNPJ: " + ( (PessoaJuridica)(cliente)).getCnpj() );
+
+			// Da mesma forma, convertemos a referência para PessoaJuridica
+			// para acessar métodos específicos dessa classe, como getCnpj().
+			System.out.println("CNPJ: " + ((PessoaJuridica) cliente).getCnpj());
+
 		}
 		
 		System.out.println("Cliente desde: " + aberturaConta.escreverPorExtenso() );

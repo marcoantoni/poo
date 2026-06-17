@@ -16,8 +16,9 @@ public class ContaCorrente extends Conta{
 
 	}
 	
+
 	// O método sacar é reimplementado, pois ele tem funcinamento diferente (polimorfismo). O saque da conta corrente leva em conta também o limite disponível do cliente
-	/* public void sacar(float valor){
+	 public void sacar(float valor){
 		if (valor > 0){
 			
 			// verifica que o cliente tem limite suficiente para realizar o saque.
@@ -33,11 +34,20 @@ public class ContaCorrente extends Conta{
 		} else {
 			System.out.println("VALOR INVÁLIDO");
 		}
-	}*/
-		
+	}
+	
+	@Override	
 	public void imprimirExtrato(){
 		// usando a referencia super para acessar o método da superclasse. ao chamar o método sem usar a referência, cria um loop infinito, pois será executado o método da classe atual  
 		super.imprimirExtrato();	
 		System.out.println("Limite: " + limite);
 	}
+	
+	// tentanto reescrever o metodo depositar
+	// como o metodo esta declarado como final ele nao pode ser sobreescrito
+	//public void depositar(float valor) {
+		
+	//	this.saldo = valor * 0.99f;
+		
+	//}
 }

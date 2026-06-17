@@ -1,4 +1,4 @@
-class Pessoa{
+abstract class Pessoa{
 	protected String nome;
 	protected Data nascimento;	// apesar do nome nascimento, vai ser um atributo genérico: pode ser quando a pessoa fisica nasceu OU quando a pessoa juridica foi aberta
 	protected String endereco;
